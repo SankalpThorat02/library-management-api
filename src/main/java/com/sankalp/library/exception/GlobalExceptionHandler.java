@@ -15,4 +15,12 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(ex.getMessage());
     }
+
+    @ExceptionHandler(AuthorHasBooksException.class)
+    public ResponseEntity<String> handleAuthorHasBooksException(AuthorHasBooksException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(ex.getMessage());
+    }
 }

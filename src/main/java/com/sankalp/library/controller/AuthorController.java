@@ -38,4 +38,10 @@ public class AuthorController {
     public List<AuthorResponse> getAllAuthors() {
         return authorService.getAllAuthors();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAuthor(@PathVariable Integer id) {
+        authorService.deleteAuthorById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

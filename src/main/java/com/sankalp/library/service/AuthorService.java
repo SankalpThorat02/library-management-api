@@ -3,8 +3,10 @@ package com.sankalp.library.service;
 import com.sankalp.library.dto.AuthorRequest;
 import com.sankalp.library.dto.AuthorResponse;
 import com.sankalp.library.entity.Author;
+import com.sankalp.library.exception.AuthorHasBooksException;
 import com.sankalp.library.exception.AuthorNotFoundException;
 import com.sankalp.library.repository.AuthorRepository;
+import com.sankalp.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
-    public AuthorService(AuthorRepository authorRepository) {
+    public AuthorService(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
     }
 
     public AuthorResponse createAuthor(AuthorRequest request) {
@@ -62,5 +66,22 @@ public class AuthorService {
         }
 
         return responses;
+    }
+
+    public void deleteAuthorById(int id) {
+
+        Author author = authorRepository.findById(id)
+                        .orElseThrow(() ->
+                                new AuthorNotFoundException("Author with ID: " + id + " not found")
+                        );
+
+        boolean booksExists = bookRepository.existsByAuthorId(id);
+
+        if(booksExists) {
+            throw new AuthorHasBooksException("Author with ID: " + id + " has books");
+        }
+        else {
+            authorRepository.delete(author);
+        }
     }
 }
