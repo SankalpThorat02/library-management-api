@@ -82,4 +82,8 @@ public class BookService {
                )).collect(Collectors.toList());
 
     }
+
+    public void deleteBookById(int id) {
+        bookRepository.deleteById(id);
+    }
 }

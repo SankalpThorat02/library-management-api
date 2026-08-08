@@ -38,4 +38,10 @@ public class BookController {
     public List<BookResponse> getAllBooks() {
         return bookService.getAllBooks();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookById(@PathVariable int id) {
+        bookService.deleteBookById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
