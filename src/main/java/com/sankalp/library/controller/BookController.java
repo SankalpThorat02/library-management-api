@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -30,5 +32,10 @@ public class BookController {
     @GetMapping("/{id}")
     public BookResponse getBookById(@PathVariable int id) {
         return bookService.getBookById(id);
+    }
+
+    @GetMapping
+    public List<BookResponse> getAllBooks() {
+        return bookService.getAllBooks();
     }
 }

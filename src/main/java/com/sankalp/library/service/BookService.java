@@ -10,6 +10,11 @@ import com.sankalp.library.repository.AuthorRepository;
 import com.sankalp.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+
 @Service
 public class BookService {
 
@@ -61,5 +66,20 @@ public class BookService {
                 book.getAuthor().getId(),
                 book.getPublishedYear()
         );
+    }
+
+    public List<BookResponse> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+
+        return books.stream()
+               .map(book -> new BookResponse(
+                       book.getId(),
+                       book.getTitle(),
+                       book.getIsbn(),
+                       book.getAuthor().getName(),
+                       book.getAuthor().getId(),
+                       book.getPublishedYear()
+               )).collect(Collectors.toList());
+
     }
 }
