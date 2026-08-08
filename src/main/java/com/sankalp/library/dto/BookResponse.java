@@ -2,6 +2,7 @@ package com.sankalp.library.dto;
 
 public class BookResponse {
 
+    private Integer id;
     private String title;
     private String isbn;
     private String authorName;
@@ -9,12 +10,21 @@ public class BookResponse {
     private Integer publishedYear;
 
 
-    public BookResponse(String title, String isbn, String authorName, Integer authorId, Integer publishedYear) {
+    public BookResponse(Integer id, String title, String isbn, String authorName, Integer authorId, Integer publishedYear) {
+        this.id = id;
         this.title = title;
         this.isbn = isbn;
         this.authorName = authorName;
         this.authorId = authorId;
         this.publishedYear = publishedYear;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {

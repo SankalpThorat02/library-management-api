@@ -5,6 +5,7 @@ import com.sankalp.library.dto.BookResponse;
 import com.sankalp.library.entity.Author;
 import com.sankalp.library.entity.Book;
 import com.sankalp.library.exception.AuthorNotFoundException;
+import com.sankalp.library.exception.BookNotFoundException;
 import com.sankalp.library.repository.AuthorRepository;
 import com.sankalp.library.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class BookService {
         Book savedBook =  bookRepository.save(book);
 
         return new BookResponse(
+                savedBook.getId(),
                 savedBook.getTitle(),
                 savedBook.getIsbn(),
                 savedBook.getAuthor().getName(),
@@ -44,5 +46,20 @@ public class BookService {
                 savedBook.getPublishedYear()
         );
 
+    }
+
+    public BookResponse getBookById(int id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new BookNotFoundException("Book with ID: " + id + " not found"));
+
+        return new BookResponse(
+                book.getId(),
+                book.getTitle(),
+                book.getIsbn(),
+                book.getAuthor().getName(),
+                book.getAuthor().getId(),
+                book.getPublishedYear()
+        );
     }
 }
