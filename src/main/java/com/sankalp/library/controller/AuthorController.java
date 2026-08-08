@@ -40,7 +40,7 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAuthor(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteAuthor(@PathVariable Integer id) {
         authorService.deleteAuthorById(id);
         return ResponseEntity.noContent().build();
     }
