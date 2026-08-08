@@ -2,8 +2,7 @@ package com.sankalp.library.controller;
 
 import com.sankalp.library.dto.BookRequest;
 import com.sankalp.library.dto.BookResponse;
-import com.sankalp.library.entity.Book;
-import com.sankalp.library.repository.BookRepository;
+
 import com.sankalp.library.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
