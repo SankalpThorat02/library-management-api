@@ -6,6 +6,7 @@ import com.sankalp.library.service.BorrowRecordService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,15 @@ public class BorrowRecordController {
         this.borrowRecordService = borrowRecordService;
     }
 
-    @PostMapping("/borrow")
+    @PostMapping("/books/borrow")
     public ResponseEntity<BorrowResponse> borrowBook(@RequestBody @Valid BorrowRequest request) {
         BorrowResponse response = borrowRecordService.borrowBook(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/books/{bookId}/return")
+    public BorrowResponse returnBook(@PathVariable Integer bookId) {
+        return borrowRecordService.returnBook(bookId);
     }
 }

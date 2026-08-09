@@ -10,13 +10,15 @@ public class BorrowResponse {
 
     private LocalDate borrowDate;
     private LocalDate dueDate;
+    private LocalDate returnDate;
 
-    public BorrowResponse(Integer id, Integer bookId, Integer memberId, LocalDate borrowDate, LocalDate dueDate) {
+    public BorrowResponse(Integer id, Integer bookId, Integer memberId, LocalDate borrowDate, LocalDate dueDate, LocalDate returnDate) {
         this.id = id;
         this.bookId = bookId;
         this.memberId = memberId;
         this.borrowDate = borrowDate;
         this.dueDate = dueDate;
+        this.returnDate = returnDate;
     }
 
     public Integer getId() {
@@ -57,5 +59,9 @@ public class BorrowResponse {
 
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public LocalDate getReturnDate() {
+        return returnDate;
     }
 }
