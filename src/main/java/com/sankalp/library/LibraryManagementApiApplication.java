@@ -32,7 +32,7 @@ public class LibraryManagementApiApplication implements ApplicationRunner {
         if(optionalUser.isEmpty()) {
             User user = new User();
             user.setUsername("sankalp");
-
+            user.setRole("ADMIN");
             user.setPassword(passwordEncoder.encode("hello123"));
 
             userRepository.save(user);

@@ -38,7 +38,10 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                     .anyRequest().authenticated())
-            .httpBasic(Customizer.withDefaults());
+            .httpBasic(Customizer.withDefaults())
+            .securityContext(securityContext ->
+                securityContext.requireExplicitSave(false)
+            );
 
         return http.build();
 
