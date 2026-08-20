@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -28,7 +29,12 @@ public class JwtService {
 
     public String createToken(Authentication authentication) {
         String sub = authentication.getName();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        Collection<? extends GrantedAuthority> grantedAuthorities = authentication.getAuthorities();
+
+        List<String> authorities = grantedAuthorities
+                                            .stream()
+                                            .map(auth -> auth.getAuthority())
+                                            .collect(Collectors.toList());
 
         Instant issuedAt = Instant.now();
         Instant expTime = issuedAt.plus(expirationTime);
