@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Duration;
 
 @Configuration
@@ -19,7 +19,7 @@ public class JwtConfig {
     private Duration expiration;
 
     @Bean
-    public Key signingKey() {
+    public SecretKey signingKey() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
     }
 
