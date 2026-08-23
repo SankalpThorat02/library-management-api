@@ -1,6 +1,6 @@
 package com.sankalp.library.service;
 
-import com.sankalp.library.dto.AuthResponse;
+import com.sankalp.library.dto.AuthResult;
 import com.sankalp.library.dto.LoginRequest;
 import com.sankalp.library.entity.RefreshToken;
 import com.sankalp.library.entity.User;
@@ -26,7 +26,7 @@ public class AuthService {
         this.refreshTokenService = refreshTokenService;
     }
 
-    public AuthResponse login(LoginRequest loginRequest) {
+    public AuthResult login(LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
@@ -41,7 +41,7 @@ public class AuthService {
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
         String accessToken = jwtService.createToken(authentication);
 
-        return new AuthResponse(accessToken, refreshToken.getToken());
+        return new AuthResult(accessToken, refreshToken.getToken());
 
     }
 }
