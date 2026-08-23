@@ -1,10 +1,16 @@
 package com.sankalp.library.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RefreshToken {
 
     @Id
@@ -12,7 +18,7 @@ public class RefreshToken {
     private Integer id;
 
     @Column(nullable = false, unique = true)
-    private String refreshToken;
+    private String token;
 
     @ManyToOne(optional = false)
     private User user;
