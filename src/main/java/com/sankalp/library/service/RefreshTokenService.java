@@ -6,6 +6,7 @@ import com.sankalp.library.exception.TokenExpiredException;
 import com.sankalp.library.exception.TokenNotFoundException;
 import com.sankalp.library.exception.TokenRevokedException;
 import com.sankalp.library.repository.RefreshTokenRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -57,5 +58,13 @@ public class RefreshTokenService {
         }
 
         return refreshToken;
+    }
+
+    @Transactional
+    public RefreshToken rotateRefreshToken(RefreshToken oldToken) {
+        oldToken.setRevoked(true);
+        refreshTokenRepository.save(oldToken);
+
+        return createRefreshToken(oldToken.getUser());
     }
 }
