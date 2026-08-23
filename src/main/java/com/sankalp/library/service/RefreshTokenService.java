@@ -2,6 +2,9 @@ package com.sankalp.library.service;
 
 import com.sankalp.library.entity.RefreshToken;
 import com.sankalp.library.entity.User;
+import com.sankalp.library.exception.TokenExpiredException;
+import com.sankalp.library.exception.TokenNotFoundException;
+import com.sankalp.library.exception.TokenRevokedException;
 import com.sankalp.library.repository.RefreshTokenRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,7 @@ import java.util.Base64;
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public  RefreshTokenService(RefreshTokenRepository refreshTokenRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
@@ -21,10 +25,7 @@ public class RefreshTokenService {
 
     public RefreshToken createRefreshToken(User user) {
 
-        Instant issuedAt = Instant.now();
-        Instant expiresAt = issuedAt.plus(Duration.ofDays(7));
-
-        SecureRandom secureRandom = new SecureRandom();
+        Instant expiresAt = Instant.now().plus(Duration.ofDays(7));
 
         byte[] randomBytes = new byte[32];
         secureRandom.nextBytes(randomBytes);
@@ -40,5 +41,21 @@ public class RefreshTokenService {
         refreshToken.setRevoked(false);
 
         return refreshTokenRepository.save(refreshToken);
+    }
+
+    public RefreshToken validateRefreshToken (String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
+                .orElseThrow(() ->
+                        new TokenNotFoundException("Refresh token not found"));
+
+        if(refreshToken.isRevoked()) {
+            throw new TokenRevokedException("Refresh token has been revoked");
+        }
+
+        if(refreshToken.getExpiresAt().isBefore(Instant.now())) {
+            throw new TokenExpiredException("Refresh token has been expired");
+        }
+
+        return refreshToken;
     }
 }
