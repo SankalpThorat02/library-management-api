@@ -4,6 +4,8 @@ import com.sankalp.library.dto.AuthResult;
 import com.sankalp.library.dto.LoginRequest;
 import com.sankalp.library.entity.RefreshToken;
 import com.sankalp.library.entity.User;
+import com.sankalp.library.exception.TokenNotFoundException;
+import com.sankalp.library.repository.RefreshTokenRepository;
 import com.sankalp.library.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,12 +25,14 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository, RefreshTokenService refreshTokenService) {
+    public AuthService(AuthenticationManager authenticationManager, JwtService jwtService, UserRepository userRepository, RefreshTokenService refreshTokenService, RefreshTokenRepository refreshTokenRepository) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.refreshTokenService = refreshTokenService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public AuthResult login(LoginRequest loginRequest) {
@@ -64,5 +68,16 @@ public class AuthService {
         String accessToken = jwtService.createToken(authToken);
 
         return new AuthResult(accessToken, newToken.getToken());
+    }
+
+    public void logout(String refreshToken) {
+
+        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
+                .orElseThrow(() ->
+                        new TokenNotFoundException("Token not found"));
+
+        token.setRevoked(false);
+
+        refreshTokenRepository.save(token);
     }
 }
