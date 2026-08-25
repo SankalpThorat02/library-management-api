@@ -76,7 +76,7 @@ public class AuthService {
                 .orElseThrow(() ->
                         new TokenNotFoundException("Token not found"));
 
-        token.setRevoked(false);
+        token.setRevoked(true);
 
         refreshTokenRepository.save(token);
     }
